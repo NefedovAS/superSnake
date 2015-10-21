@@ -4,6 +4,8 @@
 #include <QColor>
 snake::snake()
 {
+    y_shift=radius;
+    x_shift=0;
     radius=20;
     createSnake();
 }
@@ -23,6 +25,18 @@ void snake::createSnake(){
 
 
 void snake::animate(QPainter *painter, QPaintEvent *event){
+    for (int i = 6; i>=0; --i)
+    {
+        if(i==0){
+            body_snake.at(i)->x = body_snake.at(i)->x - x_shift;
+            body_snake.at(i)->y = body_snake.at(i)->y - y_shift;
+        }
+        else{
+            body_snake.at(i)->x = body_snake.at(i-1)->x;
+            body_snake.at(i)->y = body_snake.at(i-1)->y;
+        }
+    }
+
     this->draw(painter);
 }
 

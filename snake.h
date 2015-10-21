@@ -22,6 +22,7 @@ public:
     void draw(QPainter *painter);
     QList<cell*> body_snake;
     QList<cell*> new_body_snake;
+    int x_shift,y_shift;
 };
 
 #endif // SNAKE_H
