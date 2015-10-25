@@ -4,25 +4,38 @@
 #include <QList>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QWidget>
+#include <QTimer>
 struct cell
 {
     int x;
     int y;
-    int radius;
+    int diametr;
+};
+
+struct eda
+{
+    int x;
+    int y;
+    int diametr;
 };
 
 class snake
 {
 public:
-    snake();
+    snake(QWidget *w, QTimer *timer);
 public:
-    int x,y,count,radius;
+    QTimer *snakeTimer;
+    int x,y,count,diametr;
     void createSnake();
     void animate(QPainter *painter, QPaintEvent *event);
     void draw(QPainter *painter);
     QList<cell*> body_snake;
     QList<cell*> new_body_snake;
     int x_shift,y_shift;
+    bool death;
+    QWidget *parent;
+    eda apple;
 };
 
 #endif // SNAKE_H
