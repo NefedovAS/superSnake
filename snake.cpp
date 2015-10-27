@@ -10,13 +10,26 @@ snake::snake(QWidget *w,QTimer* timer)
     snakeTimer=timer;
     diametr=40;
     qsrand(0);
-    apple.x=(qrand()%(800/diametr-2)+1) * diametr+diametr/2;
-    apple.y=(qrand()%(600/diametr-2)+1) * diametr+diametr/2;;
     parent=w;
     death=false;
     y_shift=diametr;
     x_shift=0;
     createSnake();
+    bool edaVzmeike=true;
+    while(edaVzmeike){
+        edaVzmeike=false;
+        apple.x=(qrand()%(800/diametr-2)+1) * diametr+diametr/2;
+        apple.y=(qrand()%(600/diametr-2)+1) * diametr+diametr/2;
+        for (int i = 0; i< count; i++)
+        {
+            if(apple.x==body_snake.at(i)->x && apple.y==body_snake.at(i)->y){
+                edaVzmeike=true;
+                break;
+            }
+
+        }
+    }
+
 }
 
 void snake::createSnake(){
@@ -81,8 +94,20 @@ void snake::animate(QPainter *painter, QPaintEvent *event){
             }
             body_snake.append(newCell);
             count++;
-            apple.x=(qrand()%(800/diametr-2)+1) * diametr+diametr/2;
-            apple.y=(qrand()%(600/diametr-2)+1) * diametr+diametr/2;;
+            bool edaVzmeike=true;
+            while(edaVzmeike){
+                edaVzmeike=false;
+                apple.x=(qrand()%(800/diametr-2)+1) * diametr+diametr/2;
+                apple.y=(qrand()%(600/diametr-2)+1) * diametr+diametr/2;
+                for (int i = 0; i< count; i++)
+                {
+                    if(apple.x==body_snake.at(i)->x && apple.y==body_snake.at(i)->y){
+                        edaVzmeike=true;
+                        break;
+                    }
+
+                }
+            }
         }
             this->draw(painter);
     }
