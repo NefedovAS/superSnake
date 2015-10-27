@@ -5,9 +5,11 @@
 window::window(QWidget *parent)
     : QWidget(parent)
 {
+    //Скорость перерисовки 200мс
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(repaint()));
     timer->start(200);
+
     this->setFixedSize(800,600);
     Snake=new snake(this,timer);
     setStyleSheet("background-color:green;");
@@ -20,14 +22,17 @@ window::~window()
 
 void window::paintEvent(QPaintEvent *event)
 {
+    //вызов перерисовки
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    //функция расчитывает и затем рисует змейку и синие яблоки
     Snake->animate(&painter, event);
     painter.end();
 }
 
 void window::keyPressEvent(QKeyEvent *event)
 {
+    //определяем направление змейки по нажатой клавише
   switch (event->key()) {
     case 16777235:
         if(Snake->y_shift>=0){
