@@ -19,6 +19,10 @@ struct eda
     int y;
     int diametr;
 };
+struct obstacle{    // Препятствие
+    int x;
+    int y;
+};
 
 class snake
 {
@@ -36,6 +40,9 @@ public:
     bool death;
     QWidget *parent;
     eda apple;
+
+    void create_obstacle();                                 // Расстановка препятствий
+    QList<obstacle*> obstacle_list;                         // Список препятствий
 };
 
 #endif // SNAKE_H

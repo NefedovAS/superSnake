@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QApplication>
+#include <cstdlib>
+#include <ctime>
 snake::snake(QWidget *w,QTimer* timer)
 {
     snakeTimer=timer;
@@ -17,6 +19,7 @@ snake::snake(QWidget *w,QTimer* timer)
     //начальные параметры движения
     y_shift=diametr;
     x_shift=0;
+    create_obstacle();
     createSnake();
     /*
      Генерируем синие яблоко и проверяем
@@ -74,10 +77,25 @@ void snake::animate(QPainter *painter, QPaintEvent *event){
             if(body_snake.at(i)->x==body_snake.at(0)->x && body_snake.at(i)->y==body_snake.at(0)->y)
                 death=true;
         }
-        //проверка столкновения головы змейки с границами поля
-        if(((body_snake.at(0)->x+diametr/4)>=parent->width() || (body_snake.at(0)->x-diametr/4)<=0)
-            || ((body_snake.at(0)->y+diametr/4)>=parent->height()|| (body_snake.at(0)->y-diametr/4)<=0) ){
-                death=true;
+        if(false)   // Столкновение с препятствием
+        {
+
+        }
+        if(body_snake.at(0)->x+diametr/4>=parent->width())      // Выход за правую границу
+        {
+            body_snake.at(0)->x = body_snake.at(0)->x - parent->width();
+        }
+        if(body_snake.at(0)->x-diametr/4<=0)                    // Выход за левую границу
+        {
+            body_snake.at(0)->x = body_snake.at(0)->x + parent->width();
+        }
+        if(body_snake.at(0)->y+diametr/4>=parent->height())     // Выход за нижнюю границу
+        {
+            body_snake.at(0)->y = body_snake.at(0)->y - parent->height();
+        }
+        if(body_snake.at(0)->y-diametr/4<=0)                    // Выход за верхнюю границу
+        {
+            body_snake.at(0)->y = body_snake.at(0)->y + parent->height();
         }
         //если змея сьела яблоко, то удлиняем тело
         if(body_snake.at(0)->x==apple.x && body_snake.at(0)->y==apple.y){
@@ -143,6 +161,11 @@ void snake::draw(QPainter *painter){
         }
 
     }
+    for(int i = 0; i < obstacle_list.count(); i++) // Отрисовка препятствий
+    {
+        painter->setPen(QPen(Qt::gray,3,Qt::SolidLine));
+        painter->drawEllipse(obstacle_list.at(i)->x - diametr/2, obstacle_list.at(i)->y - diametr/2,diametr, diametr);
+    }
     //рисуем синее яблоко
     painter->setPen(QPen(Qt::blue,3,Qt::SolidLine));
     painter->drawEllipse(apple.x - diametr/2, apple.y - diametr/2,diametr, diametr);
@@ -172,3 +195,37 @@ void snake::draw(QPainter *painter){
         }
     }
 }
+void snake::create_obstacle()   // Расстановка препятствий
+{
+    srand(time(NULL));
+    obstacle* newObstacle = new obstacle;
+    newObstacle->x = rand() % parent->width();
+    newObstacle->x = newObstacle->x - (newObstacle->x % diametr) - diametr / 2;
+    newObstacle->y = rand() % parent->height();
+    newObstacle->y = newObstacle->y - (newObstacle->y % diametr) - diametr / 2;
+
+    obstacle_list.append(newObstacle);
+    /*delete newObstacle;
+    obstacle* newObstacle = new obstacle;*/
+    newObstacle->x += diametr;
+
+    obstacle_list.append(newObstacle);
+    newObstacle->y += diametr;
+    obstacle_list.append(newObstacle);
+    newObstacle->x = rand() % parent->width();
+    newObstacle->x = newObstacle->x - (newObstacle->x % diametr) - diametr / 2;
+    newObstacle->y = rand() % parent->height();
+    newObstacle->y = newObstacle->y - (newObstacle->y % diametr) - diametr / 2;
+    obstacle_list.append(newObstacle);
+    newObstacle->x += diametr;
+    obstacle_list.append(newObstacle);
+    newObstacle->y += diametr;
+    obstacle_list.append(newObstacle);
+    newObstacle->x += diametr;
+    obstacle_list.append(newObstacle);
+    qDebug("%d", obstacle_list.count());
+
+
+}
+
+
