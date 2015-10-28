@@ -40,7 +40,9 @@ public:
     bool death;
     QWidget *parent;
     eda apple;
-
+    void fCourse();
+    bool control;                                           // Управление
+    bool *course;                                           // Возможность хода
     void create_obstacle();                                 // Расстановка препятствий
     QList<obstacle*> obstacle_list;                         // Список препятствий
 };

@@ -33,30 +33,33 @@ void window::paintEvent(QPaintEvent *event)
 void window::keyPressEvent(QKeyEvent *event)
 {
     //определяем направление змейки по нажатой клавише
-  switch (event->key()) {
-    case 16777235:
-        if(Snake->y_shift>=0){
-            Snake->x_shift=0;
-            Snake->y_shift=Snake->diametr;
+    if(Snake->control)
+    {
+        switch (event->key()) {
+        case 16777235:
+            if(Snake->y_shift>=0){
+                Snake->x_shift=0;
+                Snake->y_shift=Snake->diametr;
+            }
+            break;
+        case 16777237:
+            if(Snake->y_shift<=0){
+                Snake->x_shift=0;
+                Snake->y_shift=-Snake->diametr;
+            }
+            break;
+        case 16777234:
+            if(Snake->x_shift>=0){
+                Snake->x_shift=Snake->diametr;
+                Snake->y_shift=0;
+            }
+            break;
+        case 16777236:
+            if(Snake->x_shift<=0){
+                Snake->x_shift=-Snake->diametr;
+                Snake->y_shift=0;
+            }
+            break;
         }
-        break;
-    case 16777237:
-      if(Snake->y_shift<=0){
-          Snake->x_shift=0;
-          Snake->y_shift=-Snake->diametr;
-      }
-        break;
-    case 16777234:
-      if(Snake->x_shift>=0){
-          Snake->x_shift=Snake->diametr;
-          Snake->y_shift=0;
-      }
-          break;
-    case 16777236:
-      if(Snake->x_shift<=0){
-          Snake->x_shift=-Snake->diametr;
-          Snake->y_shift=0;
-      }
-        break;
-  }
+    }
 }

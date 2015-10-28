@@ -9,6 +9,22 @@
 #include <ctime>
 snake::snake(QWidget *w,QTimer* timer)
 {
+    QMessageBox msgBox;
+    msgBox.setText("Управление");
+    msgBox.setInformativeText("Включить ручное управление?");
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setModal(true);
+    int ret = msgBox.exec();
+    switch (ret) {
+      case QMessageBox::Ok:
+          control = true;
+          break;
+      case QMessageBox::No:
+
+          break;
+    }
+    course = new bool[4];
     snakeTimer=timer;
     //диаметр звена змейки и синего яблока
     diametr=40;
@@ -55,9 +71,73 @@ void snake::createSnake(){
     }
 }
 
+void snake::fCourse()
+{
+    for(int i = 0; i < 4; i++)
+        course[i] = true;
+    for(int i = 0; i < body_snake.count(); i++)
+    {
+        if(body_snake.at(0)->x == body_snake.at(i)->x && body_snake.at(0)->y - body_snake.at(i)->y == diametr)
+            course[1] = false;
+        if(body_snake.at(0)->x == body_snake.at(i)->x && body_snake.at(0)->y - body_snake.at(i)->y == -diametr)
+            course[3] = false;
+        if(body_snake.at(0)->y == body_snake.at(i)->y && body_snake.at(0)->x - body_snake.at(i)->x == diametr)
+            course[0] = false;
+        if(body_snake.at(0)->y == body_snake.at(i)->y && body_snake.at(0)->x - body_snake.at(i)->x == -diametr)
+            course[2] = false;
+    }
+
+    for(int i = 0; i < obstacle_list.count(); i++)
+    {
+        if(body_snake.at(0)->x == obstacle_list.at(i)->x && body_snake.at(0)->y - obstacle_list.at(i)->y == diametr)
+            course[1] = false;
+        if(body_snake.at(0)->x == obstacle_list.at(i)->x && body_snake.at(0)->y - obstacle_list.at(i)->y == -diametr)
+            course[3] = false;
+        if(body_snake.at(0)->y == obstacle_list.at(i)->y && body_snake.at(0)->x - obstacle_list.at(i)->x == diametr)
+            course[0] = false;
+        if(body_snake.at(0)->y == obstacle_list.at(i)->y && body_snake.at(0)->x - obstacle_list.at(i)->x == -diametr)
+            course[2] = false;
+
+    }
+
+}
 
 void snake::animate(QPainter *painter, QPaintEvent *event){
     if(!death){
+        if(!control) // Интеллект. Направление к яблоку.
+        {
+
+            y_shift = 0;
+            fCourse();
+            if(body_snake.at(0)->x < apple.x && course[2])
+                x_shift = -diametr;
+            if(body_snake.at(0)->x > apple.x && course[0])
+                x_shift = diametr;
+            if(body_snake.at(0)->x == apple.x)
+            {
+                x_shift = 0;
+                if(body_snake.at(0)->y < apple.y && course[3])
+                    y_shift = -diametr;
+                else
+                    if(body_snake.at(0)->y > apple.y && course[1])
+                        y_shift = diametr;
+                    else
+                        if(course[2])
+                            x_shift = -diametr;
+                        else
+                            if(course[0])
+                                x_shift = diametr;
+                            else
+                                if(course[3])
+                                    y_shift = -diametr;
+                                else
+                                    if(course[1])
+                                        y_shift = diametr;
+
+            }
+
+
+        }
         for (int i = count-1; i>=0; --i)
         {
             //расчёт головы змейки
