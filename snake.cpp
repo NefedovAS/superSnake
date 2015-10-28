@@ -77,10 +77,18 @@ void snake::animate(QPainter *painter, QPaintEvent *event){
             if(body_snake.at(i)->x==body_snake.at(0)->x && body_snake.at(i)->y==body_snake.at(0)->y)
                 death=true;
         }
-        if(false)   // Столкновение с препятствием
-        {
+        // Столкновение с препятствием
 
+        for(int i = 0; i < obstacle_list.count(); i++)
+        {
+            if(body_snake.at(0)->x==obstacle_list.at(i)->x && body_snake.at(0)->y==obstacle_list.at(i)->y)
+            {
+                death = true;
+                break;
+            }
         }
+
+
         if(body_snake.at(0)->x+diametr/4>=parent->width())      // Выход за правую границу
         {
             body_snake.at(0)->x = body_snake.at(0)->x - parent->width();
@@ -198,31 +206,40 @@ void snake::draw(QPainter *painter){
 void snake::create_obstacle()   // Расстановка препятствий
 {
     srand(time(NULL));
-    obstacle* newObstacle = new obstacle;
-    newObstacle->x = rand() % parent->width();
-    newObstacle->x = newObstacle->x - (newObstacle->x % diametr) - diametr / 2;
-    newObstacle->y = rand() % parent->height();
-    newObstacle->y = newObstacle->y - (newObstacle->y % diametr) - diametr / 2;
+    obstacle_list.append(new obstacle);
+    obstacle_list.at(0)->x = rand() % parent->width();
+    obstacle_list.at(0)->x = obstacle_list.at(0)->x - (obstacle_list.at(0)->x % diametr) - diametr / 2;
+    obstacle_list.at(0)->y = rand() % parent->height();
+    obstacle_list.at(0)->y = obstacle_list.at(0)->y - (obstacle_list.at(0)->y % diametr) - diametr / 2;
 
-    obstacle_list.append(newObstacle);
-    /*delete newObstacle;
-    obstacle* newObstacle = new obstacle;*/
-    newObstacle->x += diametr;
+    obstacle_list.append(new obstacle);
+    obstacle_list.at(1)->x = obstacle_list.at(0)->x + diametr;
+    obstacle_list.at(1)->y = obstacle_list.at(0)->y;
+    //obstacle_list.at(1)->x += diametr;
 
-    obstacle_list.append(newObstacle);
-    newObstacle->y += diametr;
-    obstacle_list.append(newObstacle);
-    newObstacle->x = rand() % parent->width();
-    newObstacle->x = newObstacle->x - (newObstacle->x % diametr) - diametr / 2;
-    newObstacle->y = rand() % parent->height();
-    newObstacle->y = newObstacle->y - (newObstacle->y % diametr) - diametr / 2;
-    obstacle_list.append(newObstacle);
-    newObstacle->x += diametr;
-    obstacle_list.append(newObstacle);
-    newObstacle->y += diametr;
-    obstacle_list.append(newObstacle);
-    newObstacle->x += diametr;
-    obstacle_list.append(newObstacle);
+    obstacle_list.append(new obstacle);
+    obstacle_list.at(2)->x = obstacle_list.at(1)->x;
+    obstacle_list.at(2)->y = obstacle_list.at(1)->y + diametr;
+
+    obstacle_list.append(new obstacle);
+    //obstacle_list.at(3) = obstacle_list.at(2);
+    obstacle_list.at(3)->x = rand() % parent->width();
+    obstacle_list.at(3)->x = obstacle_list.at(3)->x - (obstacle_list.at(3)->x % diametr) - diametr / 2;
+    obstacle_list.at(3)->y = rand() % parent->height();
+    obstacle_list.at(3)->y = obstacle_list.at(3)->y - (obstacle_list.at(3)->y % diametr) - diametr / 2;
+
+    obstacle_list.append(new obstacle);
+    obstacle_list.at(4)->x = obstacle_list.at(3)->x + diametr;
+    obstacle_list.at(4)->y = obstacle_list.at(3)->y;
+
+    obstacle_list.append(new obstacle);
+    obstacle_list.at(5)->x = obstacle_list.at(4)->x;
+    obstacle_list.at(5)->y = obstacle_list.at(4)->y + diametr;
+
+    obstacle_list.append(new obstacle);
+    obstacle_list.at(6)->x = obstacle_list.at(5)->x + diametr;
+    obstacle_list.at(6)->y = obstacle_list.at(5)->y;
+
     qDebug("%d", obstacle_list.count());
 
 
